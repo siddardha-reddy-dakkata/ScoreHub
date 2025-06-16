@@ -1,40 +1,54 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
+const otpSchema = require("../models/otpSchema");
+require("dotenv").config();
 
-// Create transporter using nodemailer
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  port: 587,
-  secure: false, // Use true for port 465
-  auth: {
-    user: "siddardhareddy2005@gmail.com",
-    pass: process.env.EMAIL_PASSWORD,
-  }
+    service: "gmail",
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
 });
 
-// Function to send OTP
-const sendOtp = async (req) => {
-  const { email, username } = req.body;
-  console.log(req.body);
+const sendOTP = async (to) => {
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-  const otp = Math.floor(1000 + Math.random() * 9000);
+    const mailOptions = {
+        from: `"OTP Verification" <${process.env.EMAIL_USER}>`,
+        to,
+        subject: "Your OTP Code",
+        text: `Your OTP is: ${otp}`,
+    };
 
-  const mailOptions = {
-    from: "siddardhareddy2005@gmail.com",
-    to: email,
-    subject: 'Your OTP Code',
-    text: `Your OTP code is ${otp}`
-  };
+    // await transporter.sendMail(mailOptions);
 
-  try {
-    const response = await transporter.sendMail(mailOptions);
-    if (response.accepted.includes(email)) {
-      return { success: true, otp };
-    }
-    return { success: false };
-  } catch (e) {
-    console.error(e);
-    return { success: false };
-  }
+    // const otpModel = new otpSchema({
+    //     email : to,
+    //     otp: otp
+    // });
+
+    // await otpModel.save();
+
+
+    // Trying to fasten this (GPT CODe)
+    // Promise.allSettled([
+    //     transporter.sendMail(mailOptions),
+    //     otpSchema.create({ email: to, otp }) // Slightly faster than new + save
+    // ]).catch(err => console.error('OTP operations failed:', err));
+
+
+
+    Promise.allSettled([
+        transporter.sendMail(mailOptions),
+        otpSchema.updateOne(
+            { email: to },
+            { otp, updatedAt: new Date() },
+            { upsert: true } // Create a new record if it doesn't exist
+        )
+    ]).catch(err => console.error('OTP operations failed:', err));
+
 };
 
-module.exports = { sendOtp };
+module.exports = {
+    sendOTP
+}
