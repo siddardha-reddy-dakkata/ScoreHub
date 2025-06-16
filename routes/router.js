@@ -13,11 +13,14 @@ router.post('/send-otp', otpController.createAccountOtp);
 const userController = require("../controllers/userController");
 router.post("/create-user", userController.createUser);
 router.post("/login", userController.loginUser);
-
 router.post("/update-password", userController.updatePassword);
 
-const matchRoutes = require('./matchRoutes');
-app.use('/', matchRoutes);
+
+
+
+const matchController = require('../controllers/matchController/creatematch');
+router.post('/create-match', matchController.createMatch);
+
 
 
 

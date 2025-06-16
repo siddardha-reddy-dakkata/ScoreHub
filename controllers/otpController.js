@@ -16,9 +16,8 @@ const createAccountOtp = async (req, res) => {
 
     if (!userMail) return res.status(200).json({ message: 'User not found'});
 
-    
-
     await sendOtpFile.sendOTP(userMail);
+    
     return res.status(200).json({ message: 'Otp sent successfuly'});
   } catch (e) {
     console.error(e);

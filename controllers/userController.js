@@ -78,7 +78,6 @@ const loginUser = async (req, res) => {
     }
 };
 
-
 const updatePassword = async (req, res) => {
     const { email, username, otp, password} = req.body;
 

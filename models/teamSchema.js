@@ -10,10 +10,19 @@ const teamSchema = new mongoose.Schema({
 })
 
 const playerSchema = new mongoose.Schema({
+    playerType: {
+        type: String,
+        enum: ["User", "Guest"],
+        required: true,
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        // required: true
+        required: this.playerType == "User"
+    },
+    name: {
+        type: String,
+        required: this.playerType == "Guest"
     },
     captain: { type: Boolean, default: false},
 })
