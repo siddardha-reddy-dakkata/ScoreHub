@@ -1,28 +1,14 @@
 const mongoose = require('mongoose');
+const playerSchema = require('./playerSchema')
+
+
 
 const teamSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    shortName: { type: String, required: true },
-    logo: { type: String, required: true },
+  name: { type: String, required: true },
+  shortName: { type: String, required: true },
+  logo: { type: String },
+  sportType: { type: String, required: true },
+  players: [playerSchema],
+});
 
-    sportType: { type: String, required: true },
-    players: [player],
-})
-
-const playerSchema = new mongoose.Schema({
-    playerType: {
-        type: String,
-        enum: ["User", "Guest"],
-        required: true,
-    },
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: this.playerType == "User"
-    },
-    name: {
-        type: String,
-        required: this.playerType == "Guest"
-    },
-    captain: { type: Boolean, default: false},
-})
+module.exports = mongoose.model('Team', teamSchema);

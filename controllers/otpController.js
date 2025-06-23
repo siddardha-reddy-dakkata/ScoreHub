@@ -10,7 +10,6 @@ const createAccountOtp = async (req, res) => {
     if (!email && !username) {
       return res.status(500).json({ message: "Enter valid details"});
     }
-
     const userMail = email ? email : await getMail(username);
     console.log(userMail);
 
