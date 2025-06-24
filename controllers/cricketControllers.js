@@ -13,6 +13,8 @@ const startMatch = async (req, res) => {
         const teamAId = match.teamA;
         const teamBId = match.teamB;
 
+        console.log(tossWinner, tossDecision, matchId, teamAId, teamBId);
+
         let battingTeam = tossDecision === 'bat' ? tossWinner : (tossWinner.toString() === teamAId.toString() ? teamBId : teamAId);
 
         const scoreRecord = new CricketScore({
