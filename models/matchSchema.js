@@ -12,7 +12,8 @@ const matchSchema = new mongoose.Schema({
   startTime: { type: Date },
   endTime: { type: Date },
 
-  likes: { type: Number, default: 0}
+  likes: { type: Number, default: 0},
+  createdAt: { type: Date, default: Date.now() }
 });
 
 module.exports = mongoose.model('Match', matchSchema);
